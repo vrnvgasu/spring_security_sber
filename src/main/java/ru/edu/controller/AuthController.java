@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ru.edu.service.AuthResult;
 import ru.edu.service.AuthenticationManager;
 
 @Controller
@@ -36,7 +37,9 @@ public class AuthController {
 			@RequestParam("login") String login, @RequestParam("password") String password) throws IOException {
 		HttpSession session = request.getSession();
 
-		if (authenticationManager.authorize(login, password)) {
+		AuthResult authResult = authenticationManager.authorize(login, password);
+
+		if ("OK".equals(authResult.getStatus())) {
 			session.setAttribute("authObject", "AUTHENTICATED");
 			response.sendRedirect(SUCCESS_LOGIN);
 			return null;
