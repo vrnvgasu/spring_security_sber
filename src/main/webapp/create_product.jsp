@@ -15,7 +15,8 @@
 </form>
 
 <br><br>
-<form method="post" action="/auth/logout">
+<%--отправит на стандартную форму выхода--%>
+<form method="get" action="/logout">
     <input type="submit" value="LOGOUT">
 </form>
 

@@ -28,13 +28,6 @@ public class AdminController {
 	// можем сделать DI Request и Response в контроллере
 	@GetMapping("/create")
 	public ModelAndView createProductView(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// кастомная проверка на аутентификация
-		if (!isAuthenticated(request)) {
-			// перенаправили запрос (вернули Response с перенаправлением)
-			response.sendRedirect("/auth/login");
-			return null;
-		}
-
 		return new ModelAndView("/create_product.jsp");
 	}
 
@@ -42,30 +35,11 @@ public class AdminController {
 	public ModelAndView update(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("price") String price)
 			throws IOException {
-		// кастомная проверка на аутентификация
-		if (!isAuthenticated(request)) {
-			// перенаправили запрос (вернули Response с перенаправлением)
-			response.sendRedirect("/auth/login");
-			return null;
-		}
-
 		Product info = new Product(id, name, Double.parseDouble(price));
 		productCache.update(info);
 
 		ModelAndView modelAndView = new ModelAndView("/success_create_product.jsp");
 		return modelAndView;
-	}
-
-
-	private boolean isAuthenticated(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String authObject = (String) session.getAttribute("authObject");
-
-		if (!"AUTHENTICATED".equals(authObject)) {
-			return false;
-		}
-
-		return true;
 	}
 
 }
